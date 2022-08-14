@@ -1,7 +1,11 @@
 const express = require('express');
+const Routes = require('../routes');
 
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.use('/users', Routes.UserRoutes);
+
+app.get('/', (_req, res) => res.send('Servidor esta no ar!'));
 
 module.exports = app;

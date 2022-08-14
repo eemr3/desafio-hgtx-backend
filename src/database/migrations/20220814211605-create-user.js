@@ -1,7 +1,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      'Users',
+      'users',
       {
         id: {
           allowNull: false,
@@ -20,6 +20,17 @@ module.exports = {
         },
         password: {
           type: Sequelize.STRING,
+        },
+        cpf: {
+          type: Sequelize.STRING,
+          unique: true,
+          allowNull: true,
+        },
+        phone: {
+          type: Sequelize.STRING,
+        },
+        status: {
+          type: Sequelize.BOOLEAN,
         },
         birthDate: {
           type: Sequelize.DATEONLY,
@@ -44,6 +55,6 @@ module.exports = {
     );
   },
   async down(queryInterface, _Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('users');
   },
 };
