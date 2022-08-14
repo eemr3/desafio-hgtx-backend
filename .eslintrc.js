@@ -18,6 +18,7 @@ module.exports = {
     'no-duplicate-imports': 'error',
     'no-extra-parens': 'error',
     'no-return-await': 'error',
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'no-shadow': [
       'error',
       {
