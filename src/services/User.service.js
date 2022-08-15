@@ -1,8 +1,37 @@
+const bcrypt = require('bcryptjs');
 const { User } = require('../database/models');
 const baseError = require('../utils/errorBase');
 
 const createNewUser = async data => {
-  const user = await User.create(data);
+  const {
+    name,
+    email,
+    password,
+    cpf,
+    phone,
+    status,
+    role,
+    birthDate,
+    imageUrl,
+  } = data;
+  const userExist = await User.findOne({ where: { cpf } });
+  if (userExist) {
+    throw baseError(409, 'User already exists');
+  }
+
+  const pwdEncripted = await bcrypt.hash(password, 10);
+
+  const user = await User.create({
+    name,
+    email,
+    password: pwdEncripted,
+    cpf,
+    phone,
+    status,
+    role,
+    birthDate,
+    imageUrl,
+  });
 
   return user;
 };

@@ -1,9 +1,16 @@
 const UserService = require('../services/User.service');
 
 const createNewUser = async (req, res) => {
-  const user = await UserService.createNewUser(req.body);
+  try {
+    const user = await UserService.createNewUser(req.body);
 
-  return res.status(201).json(user);
+    return res.status(201).json(user);
+  } catch (error) {
+    if (error.status === 409) {
+      return res.status(error.status).json({ message: error.message });
+    }
+    return console.log(error);
+  }
 };
 
 const findAllUsers = async (_req, res) => {

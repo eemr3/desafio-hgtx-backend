@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
-const SECRETY_KEY = require('../utils/readFileKey');
+const key = require('../utils/readFileKey');
 
-const decodedToken = token => {
+const decodedToken = async token => {
   try {
+    const SECRETY_KEY = await key();
     const decoded = jwt.verify(token, SECRETY_KEY);
     return decoded;
   } catch (error) {
@@ -10,6 +11,4 @@ const decodedToken = token => {
   }
 };
 
-module.exports = {
-  decodedToken,
-};
+module.exports = decodedToken;
