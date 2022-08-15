@@ -14,7 +14,7 @@ const createNewUser = async (req, res) => {
       status,
       role,
       birthDate,
-      imageUrl: req.file.path,
+      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
     });
 
     return res.status(201).json(user);
@@ -58,8 +58,19 @@ const findUserByName = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const user = await UserService.updateUser(id, req.body);
+    const { name, email, password, cpf, phone, status, role, birthDate } =
+      req.body;
+    const user = await UserService.updateUser(id, {
+      name,
+      email,
+      password,
+      cpf,
+      phone,
+      status,
+      role,
+      birthDate,
+      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
+    });
 
     return res.status(200).json(user);
   } catch (error) {
@@ -70,10 +81,20 @@ const updateUser = async (req, res) => {
   }
 };
 
+const patchStatusAndRole = async (req, res) => {
+  const { status, role } = req.body;
+  const { id } = req.params;
+
+  await UserService.patchStatusAndRole(status, role, id);
+
+  return res.status(200).send();
+};
+
 module.exports = {
   createNewUser,
   findAllUsers,
   findUserById,
   findUserByName,
   updateUser,
+  patchStatusAndRole,
 };

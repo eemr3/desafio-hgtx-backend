@@ -4,6 +4,7 @@ const authMiddleware = require('../../middlewares/authMIddleware');
 const { userSchema } = require('../../schemas/User.schema');
 const { validateUser } = require('../../middlewares/validateMiddleware');
 const multerError = require('../../middlewares/multerError');
+const authMiddlewareAdmin = require('../../middlewares/authMIddlewareAdmin');
 
 const routes = express.Router();
 
@@ -16,6 +17,12 @@ routes.post(
   validateUser(userSchema),
   UserController.createNewUser,
 );
-routes.put('/:id', authMiddleware, UserController.updateUser);
+routes.put(
+  '/admin/:id',
+  authMiddleware,
+  authMiddlewareAdmin,
+  UserController.patchStatusAndRole,
+);
+routes.put('/:id', authMiddleware, multerError, UserController.updateUser);
 
 module.exports = routes;

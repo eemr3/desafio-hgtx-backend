@@ -71,25 +71,60 @@ const findUserByName = async name => {
 };
 
 const updateUser = async (id, data) => {
+  const {
+    name,
+    email,
+    password,
+    cpf,
+    phone,
+    status,
+    role,
+    birthDate,
+    imageUrl,
+  } = data;
+
   const userExist = await User.findOne({ where: { id } });
   if (!userExist) {
     throw baseError(404, 'User not found!');
   }
 
-  await User.update(data, { where: { id } });
+  const pwdEncripted = await bcrypt.hash(password, 10);
+  await User.update(
+    {
+      name,
+      email,
+      password: pwdEncripted,
+      cpf,
+      phone,
+      status,
+      role,
+      birthDate,
+      imageUrl,
+    },
+    { where: { id } },
+  );
 
   return {
     id: userExist.id,
-    name: data.name,
-    email: data.email,
-    password: data.password,
-    cpf: data.cpf,
-    phone: data.phone,
-    status: data.status,
-    role: data.role,
-    birthDate: data.birthDate,
-    imageUrl: data.imageUrl,
+    name: name,
+    email: email,
+    password: pwdEncripted,
+    cpf: cpf,
+    phone: phone,
+    status: status,
+    role: role,
+    birthDate: birthDate,
+    imageUrl: imageUrl,
   };
+};
+
+const patchStatusAndRole = async (status, role, id) => {
+  const userExists = await User.findOne({ where: { id } });
+  if (!userExists) {
+    throw baseError(404, 'User not found!');
+  }
+
+  await User.update({ status, role }, { where: { id } });
 };
 
 module.exports = {
@@ -98,4 +133,5 @@ module.exports = {
   findUserById,
   findUserByName,
   updateUser,
+  patchStatusAndRole,
 };
