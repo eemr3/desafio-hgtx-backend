@@ -27,7 +27,9 @@ module.exports = {
         allow: [],
       },
     ],
-    'operator-linebreak': [2, 'before', { overrides: { '?': 'after' } }],
+    'consistent-return': 'error',
+    'operator-linebreak': [{ overrides: { '?': 'after' } }],
+    // 'operator-linebreak': [2, 'before', { overrides: { '?': 'after' } }],
     'import/prefer-default-export': 'off',
   },
 };
