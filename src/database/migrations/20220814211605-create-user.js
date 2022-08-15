@@ -30,7 +30,7 @@ module.exports = {
           type: Sequelize.STRING,
         },
         status: {
-          type: Sequelize.BOOLEAN,
+          type: Sequelize.STRING,
         },
         birthDate: {
           type: Sequelize.DATEONLY,
@@ -39,6 +39,10 @@ module.exports = {
         imageUrl: {
           type: Sequelize.STRING,
           field: 'image_url',
+        },
+        role: {
+          type: Sequelize.STRING,
+          allowNull: true,
         },
         createdAt: {
           allowNull: false,
