@@ -1,4 +1,5 @@
-[Bb]uild*
-[Dd]ist*
-[Bb]in*
-package-lock.json
+/src/database/
+seeders
+/src/tests/
+jest.config.js
+/src/coverage

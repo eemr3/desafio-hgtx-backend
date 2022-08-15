@@ -1,9 +1,7 @@
 const UserService = require('../services/User.service');
 
 const createNewUser = async (req, res) => {
-  const { name, email, password, cpf, phone, status, role, birthDate } =
-    req.body;
-  console.log(req.file);
+  const { name, email, password, cpf, phone, status, role, birthDate } = req.body;
   try {
     const user = await UserService.createNewUser({
       name,
@@ -14,15 +12,11 @@ const createNewUser = async (req, res) => {
       status,
       role,
       birthDate,
-      imageUrl: req.file.path,
+      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
     });
-
     return res.status(201).json(user);
   } catch (error) {
-    if (error.status === 409) {
-      return res.status(error.status).json({ message: error.message });
-    }
-    return console.log(error);
+    return res.status(error.status).json({ message: error.message });
   }
 };
 
@@ -58,16 +52,32 @@ const findUserByName = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const user = await UserService.updateUser(id, req.body);
+    const { name, email, password, cpf, phone, status, role, birthDate } = req.body;
+    const user = await UserService.updateUser(id, {
+      name,
+      email,
+      password,
+      cpf,
+      phone,
+      status,
+      role,
+      birthDate,
+      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
+    });
 
     return res.status(200).json(user);
   } catch (error) {
-    if (error.status === 404) {
-      return res.status(error.status).json({ message: error.message });
-    }
-    return console.log(error);
+    return res.status(error.status).json({ message: error.message });
   }
+};
+
+const patchStatusAndRole = async (req, res) => {
+  const { status, role } = req.body;
+  const { id } = req.params;
+
+  await UserService.patchStatusAndRole(status, role, id);
+
+  return res.status(200).send();
 };
 
 module.exports = {
@@ -76,4 +86,5 @@ module.exports = {
   findUserById,
   findUserByName,
   updateUser,
+  patchStatusAndRole,
 };
