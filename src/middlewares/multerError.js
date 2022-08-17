@@ -6,8 +6,10 @@ const upload = multer({
 }).single('file');
 
 const multerError = (req, res, next) => {
-  upload(req, res, err => {
+  upload(req, res, (err) => {
     if (err instanceof multer.MulterError) {
+      console.log(multer.MulterError);
+
       return res.status(400).json({ message: err.code });
     }
     if (err) {

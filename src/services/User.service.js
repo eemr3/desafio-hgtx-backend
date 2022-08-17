@@ -2,21 +2,12 @@ const bcrypt = require('bcryptjs');
 const { User } = require('../database/models');
 const baseError = require('../utils/errorBase');
 
-const createNewUser = async data => {
-  const {
-    name,
-    email,
-    password,
-    cpf,
-    phone,
-    status,
-    role,
-    birthDate,
-    imageUrl,
-  } = data;
+const MESSAGE_ERROR_404 = 'Usuário não encontrado!';
+const createNewUser = async (data) => {
+  const { name, email, password, cpf, phone, status, role, birthDate, imageUrl } = data;
   const userExist = await User.findOne({ where: { cpf } });
   if (userExist) {
-    throw baseError(409, 'User already exists');
+    throw baseError(409, 'Usuário já cadastrado!');
   }
 
   const pwdEncripted = await bcrypt.hash(password, 10);
@@ -44,84 +35,60 @@ const findAllUsers = async () => {
   return users;
 };
 
-const findUserById = async id => {
+const findUserById = async (id) => {
   const user = await User.findOne({
     where: { id },
-    attributes: { exclude: ['passaord', 'cpf'] },
+    attributes: { exclude: ['passaord'] },
   });
 
   if (!user) {
-    throw baseError(404, 'User not found!');
+    throw baseError(404, MESSAGE_ERROR_404);
   }
 
   return user;
 };
 
-const findUserByName = async name => {
+const findUserByName = async (name) => {
   const user = await User.findOne({
     where: { name },
     attributes: { exclude: ['passaord', 'cpf'] },
   });
 
   if (!user) {
-    throw baseError(404, 'User not found!');
+    throw baseError(404, MESSAGE_ERROR_404);
   }
 
   return user;
 };
 
 const updateUser = async (id, data) => {
-  const {
-    name,
-    email,
-    password,
-    cpf,
-    phone,
-    status,
-    role,
-    birthDate,
-    imageUrl,
-  } = data;
+  const { name, email, cpf, phone, status, role, birthDate, imageUrl } = data;
 
   const userExist = await User.findOne({ where: { id } });
-  if (!userExist) {
-    throw baseError(404, 'User not found!');
-  }
+  if (!userExist) throw baseError(404, MESSAGE_ERROR_404);
 
-  const pwdEncripted = await bcrypt.hash(password, 10);
   await User.update(
-    {
-      name,
-      email,
-      password: pwdEncripted,
-      cpf,
-      phone,
-      status,
-      role,
-      birthDate,
-      imageUrl,
-    },
+    { name, email, cpf, phone, status, role, birthDate, imageUrl },
     { where: { id } },
   );
 
   return {
     id: userExist.id,
-    name: name,
-    email: email,
-    password: pwdEncripted,
-    cpf: cpf,
-    phone: phone,
-    status: status,
-    role: role,
-    birthDate: birthDate,
-    imageUrl: imageUrl,
+    name,
+    email,
+    cpf: userExist.cpf,
+    phone,
+    status,
+    role,
+    birthDate,
+    imageUrl,
   };
 };
 
 const patchStatusAndRole = async (status, role, id) => {
   const userExists = await User.findOne({ where: { id } });
   if (!userExists) {
-    throw baseError(404, 'User not found!');
+    throw baseError(404, MESSAGE_ERROR_404);
   }
 
   await User.update({ status, role }, { where: { id } });

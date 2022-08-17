@@ -51,9 +51,8 @@ const findUserByName = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
     const { name, email, password, cpf, phone, status, role, birthDate } = req.body;
-    const user = await UserService.updateUser(id, {
+    const user = await UserService.updateUser(req.params.id, {
       name,
       email,
       password,
@@ -67,6 +66,7 @@ const updateUser = async (req, res) => {
 
     return res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     return res.status(error.status).json({ message: error.message });
   }
 };
