@@ -6,11 +6,11 @@ const erroBase = require('../utils/errorBase');
 const signIn = async (useEmail, password) => {
   const user = await User.findOne({ where: { email: useEmail } });
 
-  if (!user) throw erroBase(401, 'User or password incorrect');
+  if (!user) throw erroBase(401, 'Usuário ou senha incorretos');
 
   const pdwDecripted = await bcrypt.compare(password, user.password);
 
-  if (!pdwDecripted) throw erroBase(401, 'User or password incorrect');
+  if (!pdwDecripted) throw erroBase(401, 'Usuário ou senha incorretos');
 
   const { id, name, email, role, imageUrl } = user;
 
