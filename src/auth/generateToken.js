@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const key = require('../utils/readFileKey');
 
-const gnerateToken = async data => {
+const gnerateToken = async (data) => {
   const config = {
     algorithm: 'HS256',
     expiresIn: '1d',
