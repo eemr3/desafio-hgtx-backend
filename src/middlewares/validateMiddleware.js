@@ -1,4 +1,4 @@
-const validateUser = schema => (req, res, next) => {
+const validateUser = (schema) => (req, res, next) => {
   const { name, email, password, cpf, status, role } = req.body;
 
   const { error } = schema.validate({

@@ -3,6 +3,7 @@ const { User } = require('../database/models');
 const baseError = require('../utils/errorBase');
 
 const MESSAGE_ERROR_404 = 'Usuário não encontrado!';
+
 const createNewUser = async (data) => {
   const { name, email, password, cpf, phone, status, role, birthDate, imageUrl } = data;
   const userExist = await User.findOne({ where: { cpf } });
