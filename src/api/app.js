@@ -11,6 +11,8 @@ app.use('/images', express.static('public/uploads'));
 
 app.use('/users', Routes.UserRoutes);
 app.use('/login', Routes.LoginRoutes);
+app.use('/image-profile', Routes.ImageFileRoutes);
+
 app.get('/', (_req, res) => res.send('Servidor esta no ar!'));
 
 module.exports = app;

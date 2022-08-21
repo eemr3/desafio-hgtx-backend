@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs');
-const { User } = require('../database/models');
+const { User, ImageFile } = require('../database/models');
 const baseError = require('../utils/errorBase');
 
 const MESSAGE_ERROR_404 = 'Usuário não encontrado!';
 
 const createNewUser = async (data) => {
-  const { name, email, password, cpf, phone, status, role, birthDate, imageUrl } = data;
+  const { name, email, password, cpf, phone, status, role, birthDate } = data;
   const userExist = await User.findOne({ where: { cpf } });
   if (userExist) {
     throw baseError(409, 'Usuário já cadastrado!');
@@ -22,7 +22,6 @@ const createNewUser = async (data) => {
     status,
     role,
     birthDate,
-    imageUrl,
   });
 
   return user;
@@ -39,7 +38,10 @@ const findAllUsers = async () => {
 const findUserById = async (id) => {
   const user = await User.findOne({
     where: { id },
-    attributes: { exclude: ['passaord'] },
+    attributes: {
+      exclude: ['passaord'],
+    },
+    include: { model: ImageFile, as: 'imageFiles' },
   });
 
   if (!user) {
@@ -63,13 +65,13 @@ const findUserByName = async (name) => {
 };
 
 const updateUser = async (id, data) => {
-  const { name, email, cpf, phone, status, role, birthDate, imageUrl } = data;
+  const { name, email, cpf, phone, status, role, birthDate } = data;
 
   const userExist = await User.findOne({ where: { id } });
   if (!userExist) throw baseError(404, MESSAGE_ERROR_404);
 
   await User.update(
-    { name, email, cpf, phone, status, role, birthDate, imageUrl },
+    { name, email, cpf, phone, status, role, birthDate },
     { where: { id } },
   );
 
@@ -82,7 +84,6 @@ const updateUser = async (id, data) => {
     status,
     role,
     birthDate,
-    imageUrl,
   };
 };
 

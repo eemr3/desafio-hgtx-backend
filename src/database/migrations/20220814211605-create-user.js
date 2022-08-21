@@ -36,10 +36,10 @@ module.exports = {
           type: Sequelize.DATEONLY,
           field: 'birth_date',
         },
-        imageUrl: {
-          type: Sequelize.STRING,
-          field: 'image_url',
-        },
+        // imageUrl: {
+        //   type: Sequelize.STRING,
+        //   field: 'image_url',
+        // },
         role: {
           type: Sequelize.STRING,
           allowNull: true,

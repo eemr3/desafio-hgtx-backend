@@ -12,7 +12,6 @@ const createNewUser = async (req, res) => {
       status,
       role,
       birthDate,
-      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
     });
     return res.status(201).json(user);
   } catch (error) {
@@ -61,7 +60,6 @@ const updateUser = async (req, res) => {
       status,
       role,
       birthDate,
-      imageUrl: `http://localhost:3333/images/${req.file.originalname}`,
     });
 
     return res.status(200).json(user);

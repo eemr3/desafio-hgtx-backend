@@ -13,14 +13,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         field: 'birth_date',
       },
-      imageUrl: {
-        type: DataTypes.STRING,
-        field: 'image_url',
-      },
+      // imageUrl: {
+      //   type: DataTypes.STRING,
+      //   field: 'image_url',
+      // },
     },
     {
       tableName: 'users',
     },
   );
+
+  User.associate = (models) => {
+    User.hasOne(models.ImageFile, { foreignKey: 'userId', as: 'imageFiles' });
+  };
+
   return User;
 };
